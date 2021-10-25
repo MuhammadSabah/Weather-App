@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:weather_app/Utils/weather_icon.dart';
+import 'package:weather_app/getX/controller.dart';
 
 class WeekDaysContainer extends StatefulWidget {
   const WeekDaysContainer({Key? key, @required this.weatherDataJson})
@@ -37,7 +38,7 @@ class _WeekDaysContainerState extends State<WeekDaysContainer> {
 
         iconCode = widget.weatherDataJson["daily"][7 - (index + 1)]["weather"]
             [0]["icon"];
-        weatherIconData = getIconData(iconCode);
+        weatherIconData = StateController().getIconData(iconCode);
       });
       return {
         'day': DateFormat.E().format(eachWeekDay).substring(0, 3),

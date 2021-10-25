@@ -11,16 +11,15 @@ class WeatherModel {
   //   LocationPermission permissionRequest = await Geolocator.requestPermission();
   //   return permissionRequest;
   // }
-
+  // if (permissionResult == LocationPermission.denied ||
+  //     permissionResult == LocationPermission.deniedForever) {
+  //   ifPermissionDenied();
+  // }
   Future<void> permissionFunction() async {
     var permissionResult = await Geolocator.checkPermission();
     if (permissionResult == LocationPermission.always) {
       getLocationAndWeatherData();
     }
-    // if (permissionResult == LocationPermission.denied ||
-    //     permissionResult == LocationPermission.deniedForever) {
-    //   ifPermissionDenied();
-    // }
   }
 
   Future<dynamic> getLocationAndWeatherData() async {

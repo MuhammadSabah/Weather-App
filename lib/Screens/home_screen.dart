@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:weather_app/Services/get_weather.dart';
-import 'package:weather_app/Utils/weather_icon.dart';
 import 'package:weather_app/Widgtes/bottom_container.dart';
 import 'package:weather_app/Widgtes/center_container.dart';
 import 'package:weather_app/Widgtes/week_days_container.dart';
 import 'package:weather_app/Widgtes/tertiary_container.dart';
+import 'package:weather_app/getX/controller.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, this.weatherDataJson}) : super(key: key);
@@ -40,11 +41,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    updateUI(widget.weatherDataJson);
+
+    _updateUI(widget.weatherDataJson);
   }
 
-  void updateUI(dynamic weatherDataInput) {
-    // Change it to PROVIDER......
+  void _updateUI(dynamic weatherDataInput) {
     setState(() {
       if (weatherDataInput == null) {
         temperatureDegree = 0;
@@ -59,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return;
       }
       iconCode = weatherDataInput["current"]["weather"][0]["icon"];
-      weatherIconData = getIconData(iconCode);
+      weatherIconData = StateController().getIconData(iconCode);
 
       int sunriseDT = weatherDataInput["current"]["sunrise"];
       int sunsetDT = weatherDataInput["current"]["sunset"];
@@ -80,47 +81,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  IconData getIconData(String iconCode) {
-    switch (this.iconCode) {
-      case '01d':
-        return WeatherIcons.clearDay;
-      case '01n':
-        return WeatherIcons.clearNight;
-      case '02d':
-        return WeatherIcons.fewCloudsDay;
-      case '02n':
-        return WeatherIcons.fewCloudsNight;
-      case '03d':
-      case '04d':
-        return WeatherIcons.cloudDay;
-      case '03n':
-      case '04n':
-        return WeatherIcons.cloudNight;
-      case '09d':
-        return WeatherIcons.showerRainDay;
-      case '09n':
-        return WeatherIcons.showerRainNight;
-      case '10d':
-        return WeatherIcons.rainDay;
-      case '10n':
-        return WeatherIcons.rainNight;
-      case '11d':
-        return WeatherIcons.thunderStormDay;
-      case '11n':
-        return WeatherIcons.thunderStormNight;
-      case '13d':
-        return WeatherIcons.snowDay;
-      case '13n':
-        return WeatherIcons.snowNight;
-      case '50d':
-        return WeatherIcons.mistDay;
-      case '50n':
-        return WeatherIcons.mistNight;
-      default:
-        return WeatherIcons.clearDay;
-    }
-  }
-
   // *********************************************
   String getTheDateTime(int dt) {
     var d12;
@@ -131,8 +91,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return d12;
   }
 
+  // *********************************************
   @override
   Widget build(BuildContext context) {
+    StateController stateController = Get.put(StateController());
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -150,50 +112,59 @@ class _HomeScreenState extends State<HomeScreen> {
           style: Theme.of(context).textTheme.bodyText2,
         ),
       ),
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            //CenterContainer
-            CenterContainer(
-              cityName: cityName,
-              temperatureDegree: temperatureDegree,
-              weatherCondition: weatherCondition,
-              centerIcon: weatherIconData,
+      body: GetBuilder<StateController>(
+        init: StateController(),
+        initState: (_) {
+          stateController.updateUI(widget.weatherDataJson);
+        },
+        builder: (_) {
+          return SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                //CenterContainer
+                Obx(() => CenterContainer(
+                      cityName: cityName,
+                      temperatureDegree:
+                          stateController.temperatureDegree.value,
+                      weatherCondition: weatherCondition,
+                      centerIcon: weatherIconData,
+                    )),
+
+                SizedBox(height: _fixedHeight),
+                // SliderContainer
+                TertiaryContainer(
+                  minDegree: minDegree,
+                  maxDegree: maxDegree,
+                ),
+                //
+                SizedBox(height: _fixedHeight * 2),
+                const Divider(
+                  thickness: 1,
+                ),
+                SizedBox(height: _fixedHeight),
+                // ListViewContainer
+                WeekDaysContainer(
+                  weatherDataJson: widget.weatherDataJson,
+                ),
+                SizedBox(height: _fixedHeight),
+                const Divider(
+                  thickness: 1,
+                ),
+                SizedBox(height: _fixedHeight),
+                // BottomContainer
+                BottomContainer(
+                  humidity: humidity,
+                  windSpeed: windSpeed,
+                  sunrise: sunrise,
+                  sunset: sunset,
+                ),
+                //
+                SizedBox(height: _fixedHeight * 4),
+              ],
             ),
-            //
-            SizedBox(height: _fixedHeight),
-            // SliderContainer
-            TertiaryContainer(
-              minDegree: minDegree,
-              maxDegree: maxDegree,
-            ),
-            //
-            SizedBox(height: _fixedHeight * 2),
-            const Divider(
-              thickness: 1,
-            ),
-            SizedBox(height: _fixedHeight),
-            // ListViewContainer
-            WeekDaysContainer(
-              weatherDataJson: widget.weatherDataJson,
-            ),
-            SizedBox(height: _fixedHeight),
-            const Divider(
-              thickness: 1,
-            ),
-            SizedBox(height: _fixedHeight),
-            // BottomContainer
-            BottomContainer(
-              humidity: humidity,
-              windSpeed: windSpeed,
-              sunrise: sunrise,
-              sunset: sunset,
-            ),
-            //
-            SizedBox(height: _fixedHeight * 4),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
