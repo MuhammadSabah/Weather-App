@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:weather_app/Services/get_weather.dart';
 import 'package:weather_app/Utils/weather_icon.dart';
 
 class StateController extends GetxController {
   StateController({this.weatherDataJsonState});
   final weatherDataJsonState;
 
-  late int dt;
   final sunrise = ''.obs;
   final sunset = ''.obs;
   final temperatureDegree = 0.obs;
@@ -20,7 +18,6 @@ class StateController extends GetxController {
   final humidity = 0.obs;
   final weatherIconData = Rxn<dynamic>();
   final iconCode = ''.obs;
-
   //
   void updateUI(dynamic weatherDataInput) {
     if (weatherDataInput == null) {

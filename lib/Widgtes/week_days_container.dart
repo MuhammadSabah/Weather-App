@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:weather_app/Utils/weather_icon.dart';
 import 'package:weather_app/getX/controller.dart';
 
 class WeekDaysContainer extends StatefulWidget {
@@ -49,46 +48,46 @@ class _WeekDaysContainerState extends State<WeekDaysContainer> {
     }).reversed.toList();
   }
 
-  IconData getIconData(String iconCode) {
-    switch (this.iconCode) {
-      case '01d':
-        return WeatherIcons.clearDay;
-      case '01n':
-        return WeatherIcons.clearNight;
-      case '02d':
-        return WeatherIcons.fewCloudsDay;
-      case '02n':
-        return WeatherIcons.fewCloudsNight;
-      case '03d':
-      case '04d':
-        return WeatherIcons.cloudDay;
-      case '03n':
-      case '04n':
-        return WeatherIcons.cloudNight;
-      case '09d':
-        return WeatherIcons.showerRainDay;
-      case '09n':
-        return WeatherIcons.showerRainNight;
-      case '10d':
-        return WeatherIcons.rainDay;
-      case '10n':
-        return WeatherIcons.rainNight;
-      case '11d':
-        return WeatherIcons.thunderStormDay;
-      case '11n':
-        return WeatherIcons.thunderStormNight;
-      case '13d':
-        return WeatherIcons.snowDay;
-      case '13n':
-        return WeatherIcons.snowNight;
-      case '50d':
-        return WeatherIcons.mistDay;
-      case '50n':
-        return WeatherIcons.mistNight;
-      default:
-        return WeatherIcons.clearDay;
-    }
-  }
+  // IconData getIconData(String iconCode) {
+  //   switch (this.iconCode) {
+  //     case '01d':
+  //       return WeatherIcons.clearDay;
+  //     case '01n':
+  //       return WeatherIcons.clearNight;
+  //     case '02d':
+  //       return WeatherIcons.fewCloudsDay;
+  //     case '02n':
+  //       return WeatherIcons.fewCloudsNight;
+  //     case '03d':
+  //     case '04d':
+  //       return WeatherIcons.cloudDay;
+  //     case '03n':
+  //     case '04n':
+  //       return WeatherIcons.cloudNight;
+  //     case '09d':
+  //       return WeatherIcons.showerRainDay;
+  //     case '09n':
+  //       return WeatherIcons.showerRainNight;
+  //     case '10d':
+  //       return WeatherIcons.rainDay;
+  //     case '10n':
+  //       return WeatherIcons.rainNight;
+  //     case '11d':
+  //       return WeatherIcons.thunderStormDay;
+  //     case '11n':
+  //       return WeatherIcons.thunderStormNight;
+  //     case '13d':
+  //       return WeatherIcons.snowDay;
+  //     case '13n':
+  //       return WeatherIcons.snowNight;
+  //     case '50d':
+  //       return WeatherIcons.mistDay;
+  //     case '50n':
+  //       return WeatherIcons.mistNight;
+  //     default:
+  //       return WeatherIcons.clearDay;
+  //   }
+  // }
 
   final double _fixedHeight = 5;
 

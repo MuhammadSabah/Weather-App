@@ -8,88 +8,79 @@ import 'package:weather_app/Widgtes/week_days_container.dart';
 import 'package:weather_app/Widgtes/tertiary_container.dart';
 import 'package:weather_app/getX/controller.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key, this.weatherDataJson}) : super(key: key);
-
+class HomeScreen extends StatelessWidget {
+  HomeScreen({Key? key, this.weatherDataJson}) : super(key: key);
   final weatherDataJson;
 
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
   final double _fixedHeight = 10;
-
-  // ************************
   var dateStringFormat = DateFormat.yMMMEd('en_US').format(DateTime.now());
-  //
   var weatherData = WeatherModel().getLocationAndWeatherData();
   //
-  late int dt;
-  late String sunrise;
-  late String sunset;
-  late int temperatureDegree;
-  late int maxDegree;
-  late int minDegree;
-  late String cityName;
-  late String weatherCondition;
-  late double windSpeed;
-  late int humidity;
-  late IconData weatherIconData;
-  late String iconCode;
-  //
-  @override
-  void initState() {
-    super.initState();
+  // late int dt;
+  // late String sunrise;
+  // late String sunset;
+  // late int temperatureDegree;
+  // late int maxDegree;
+  // late int minDegree;
+  // late String cityName;
+  // late String weatherCondition;
+  // late double windSpeed;
+  // late int humidity;
+  // late IconData weatherIconData;
+  // late String iconCode;
+  // //
+  // @override
+  // void initState() {
+  //   super.initState();
 
-    _updateUI(widget.weatherDataJson);
-  }
+  //   // _updateUI(widget.weatherDataJson);
+  // }
 
-  void _updateUI(dynamic weatherDataInput) {
-    setState(() {
-      if (weatherDataInput == null) {
-        temperatureDegree = 0;
-        maxDegree = 0;
-        minDegree = 0;
-        humidity = 0;
-        windSpeed = 0;
-        sunrise = "00:00";
-        sunset = "00:00";
-        cityName = "Error";
-        weatherCondition = "Not Available";
-        return;
-      }
-      iconCode = weatherDataInput["current"]["weather"][0]["icon"];
-      weatherIconData = StateController().getIconData(iconCode);
+  // void _updateUI(dynamic weatherDataInput) {
+  //   setState(() {
+  //     if (weatherDataInput == null) {
+  //       temperatureDegree = 0;
+  //       maxDegree = 0;
+  //       minDegree = 0;
+  //       humidity = 0;
+  //       windSpeed = 0;
+  //       sunrise = "00:00";
+  //       sunset = "00:00";
+  //       cityName = "Error";
+  //       weatherCondition = "Not Available";
+  //       return;
+  //     }
+  //     iconCode = weatherDataInput["current"]["weather"][0]["icon"];
+  //     weatherIconData = StateController().getIconData(iconCode);
 
-      int sunriseDT = weatherDataInput["current"]["sunrise"];
-      int sunsetDT = weatherDataInput["current"]["sunset"];
-      sunrise = getTheDateTime(sunriseDT);
-      sunset = getTheDateTime(sunsetDT);
+  //     int sunriseDT = weatherDataInput["current"]["sunrise"];
+  //     int sunsetDT = weatherDataInput["current"]["sunset"];
+  //     sunrise = getTheDateTime(sunriseDT);
+  //     sunset = getTheDateTime(sunsetDT);
 
-      double temp = weatherDataInput["current"]["temp"];
-      temperatureDegree = temp.toInt();
-      double maxTemp = weatherDataInput["daily"][0]["temp"]["max"];
-      double minTemp = weatherDataInput["daily"][0]["temp"]["min"];
-      maxDegree = maxTemp.toInt();
-      minDegree = minTemp.toInt();
-      cityName = weatherDataInput["timezone"];
-      weatherCondition =
-          weatherDataInput["current"]["weather"][0]["description"];
-      windSpeed = weatherDataInput["current"]["wind_speed"];
-      humidity = weatherDataInput["current"]["humidity"];
-    });
-  }
+  //     double temp = weatherDataInput["current"]["temp"];
+  //     temperatureDegree = temp.toInt();
+  //     double maxTemp = weatherDataInput["daily"][0]["temp"]["max"];
+  //     double minTemp = weatherDataInput["daily"][0]["temp"]["min"];
+  //     maxDegree = maxTemp.toInt();
+  //     minDegree = minTemp.toInt();
+  //     cityName = weatherDataInput["timezone"];
+  //     weatherCondition =
+  //         weatherDataInput["current"]["weather"][0]["description"];
+  //     windSpeed = weatherDataInput["current"]["wind_speed"];
+  //     humidity = weatherDataInput["current"]["humidity"];
+  //   });
+  // }
 
   // *********************************************
-  String getTheDateTime(int dt) {
-    var d12;
-    setState(() {
-      d12 = DateFormat('hh:mm a')
-          .format(DateTime.fromMillisecondsSinceEpoch(dt * 1000));
-    });
-    return d12;
-  }
+  // String getTheDateTime(int dt) {
+  //   var d12;
+
+  //     d12 = DateFormat('hh:mm a')
+  //         .format(DateTime.fromMillisecondsSinceEpoch(dt * 1000));
+
+  //   return d12;
+  // }
 
   // *********************************************
   @override
@@ -115,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: GetBuilder<StateController>(
         init: StateController(),
         initState: (_) {
-          stateController.updateUI(widget.weatherDataJson);
+          stateController.updateUI(weatherDataJson);
         },
         builder: (_) {
           return SafeArea(
@@ -124,19 +115,19 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 //CenterContainer
                 Obx(() => CenterContainer(
-                      cityName: cityName,
+                      cityName: stateController.cityName.value,
                       temperatureDegree:
                           stateController.temperatureDegree.value,
-                      weatherCondition: weatherCondition,
-                      centerIcon: weatherIconData,
+                      weatherCondition: stateController.weatherCondition.value,
+                      centerIcon: stateController.weatherIconData.value,
                     )),
 
                 SizedBox(height: _fixedHeight),
                 // SliderContainer
-                TertiaryContainer(
-                  minDegree: minDegree,
-                  maxDegree: maxDegree,
-                ),
+                Obx(() => TertiaryContainer(
+                      minDegree: stateController.minDegree.value,
+                      maxDegree: stateController.maxDegree.value,
+                    )),
                 //
                 SizedBox(height: _fixedHeight * 2),
                 const Divider(
@@ -145,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 SizedBox(height: _fixedHeight),
                 // ListViewContainer
                 WeekDaysContainer(
-                  weatherDataJson: widget.weatherDataJson,
+                  weatherDataJson: weatherDataJson,
                 ),
                 SizedBox(height: _fixedHeight),
                 const Divider(
@@ -153,12 +144,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 SizedBox(height: _fixedHeight),
                 // BottomContainer
-                BottomContainer(
-                  humidity: humidity,
-                  windSpeed: windSpeed,
-                  sunrise: sunrise,
-                  sunset: sunset,
-                ),
+                Obx(() => BottomContainer(
+                      humidity: stateController.humidity.value,
+                      windSpeed: stateController.windSpeed.value,
+                      sunrise: stateController.sunrise.value,
+                      sunset: stateController.sunset.value,
+                    )),
                 //
                 SizedBox(height: _fixedHeight * 4),
               ],
