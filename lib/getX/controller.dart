@@ -6,7 +6,7 @@ import 'package:weather_app/Utils/weather_icon.dart';
 class StateController extends GetxController {
   StateController({this.weatherDataJsonState});
   final weatherDataJsonState;
-
+  //
   final sunrise = ''.obs;
   final sunset = ''.obs;
   final temperatureDegree = 0.obs;
@@ -19,6 +19,11 @@ class StateController extends GetxController {
   final weatherIconData = Rxn<dynamic>();
   final iconCode = ''.obs;
   //
+  final weekDaysIconCode = ''.obs;
+  final weekDaysWeatherIconData = Rxn<dynamic>();
+  final eachDayTemp = 0.obs;
+  final eachNightTemp = 0.obs;
+  //
   void updateUI(dynamic weatherDataInput) {
     if (weatherDataInput == null) {
       temperatureDegree(0).toInt();
@@ -30,28 +35,28 @@ class StateController extends GetxController {
       sunset('00:00').toString();
       cityName('Error').toString();
       weatherCondition("Not Available").toString();
+
       return;
-    } else {
-      iconCode(weatherDataInput["current"]["weather"][0]["icon"]).toString();
-      weatherIconData(getIconData(iconCode.toString()));
-
-      int sunriseDT = weatherDataInput["current"]["sunrise"];
-      int sunsetDT = weatherDataInput["current"]["sunset"];
-      sunrise(getTheDateTime(sunriseDT).toString());
-      sunset(getTheDateTime(sunsetDT).toString());
-
-      double temp = weatherDataInput["current"]["temp"];
-      temperatureDegree(temp.toInt());
-      double maxTemp = weatherDataInput["daily"][0]["temp"]["max"];
-      double minTemp = weatherDataInput["daily"][0]["temp"]["min"];
-      maxDegree(maxTemp.toInt());
-      minDegree(minTemp.toInt());
-      cityName(weatherDataInput["timezone"].toString());
-      weatherCondition(
-          weatherDataInput["current"]["weather"][0]["description"].toString());
-      windSpeed(weatherDataInput["current"]["wind_speed"].toDouble());
-      humidity(weatherDataInput["current"]["humidity"].toInt());
     }
+    iconCode(weatherDataInput["current"]["weather"][0]["icon"]).toString();
+    weatherIconData(getIconData(iconCode.toString()));
+
+    int sunriseDT = weatherDataInput["current"]["sunrise"];
+    int sunsetDT = weatherDataInput["current"]["sunset"];
+    sunrise(getTheDateTime(sunriseDT).toString());
+    sunset(getTheDateTime(sunsetDT).toString());
+
+    double temp = weatherDataInput["current"]["temp"];
+    temperatureDegree(temp.toInt());
+    var maxTemp = weatherDataInput["daily"][0]["temp"]["max"];
+    var minTemp = weatherDataInput["daily"][0]["temp"]["min"];
+    maxDegree(maxTemp.toInt());
+    minDegree(minTemp.toInt());
+    cityName(weatherDataInput["timezone"].toString());
+    weatherCondition(
+        weatherDataInput["current"]["weather"][0]["description"].toString());
+    windSpeed(weatherDataInput["current"]["wind_speed"].toDouble());
+    humidity(weatherDataInput["current"]["humidity"].toInt());
   }
 
   //
@@ -63,6 +68,25 @@ class StateController extends GetxController {
   }
 
   //
+  void updateTheWeekDay(dynamic weatherDataInput, int index) {
+    if (weatherDataInput == null) {
+      eachDayTemp(0).toInt();
+      eachNightTemp(0).toInt();
+      return;
+    }
+    double tempOfDays =
+        weatherDataInput["daily"][7 - (index + 1)]["temp"]["day"];
+    eachDayTemp(tempOfDays.toInt());
+    //
+    double tempOfNights =
+        weatherDataInput["daily"][7 - (index + 1)]["temp"]["night"];
+    eachNightTemp(tempOfNights.toInt());
+    //
+    weekDaysIconCode(
+        weatherDataInput["daily"][7 - (index + 1)]["weather"][0]["icon"]);
+    weekDaysWeatherIconData(getIconData(weekDaysIconCode.toString()));
+  }
+
   IconData getIconData(String iconCode) {
     switch (iconCode) {
       case '01d':
@@ -104,13 +128,3 @@ class StateController extends GetxController {
     }
   }
 }
- // late String sunset;
-  // late int temperatureDegree;
-  // late int maxDegree;
-  // late int minDegree;
-  // late String cityName;
-  // late String weatherCondition;
-  // late double windSpeed;
-  // late int humidity;
-  // late IconData weatherIconData;
-  // late String iconCode;
