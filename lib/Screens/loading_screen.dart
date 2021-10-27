@@ -37,7 +37,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
     }
     if (weatherData != null) {
       Get.to(() => HomeScreen(weatherDataJson: weatherData));
-      // Get.to(() => StateController(weatherDataJsonState: weatherData));
     }
   }
 
