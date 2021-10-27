@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:weather_app/Screens/settings_screen.dart';
 import 'package:weather_app/Services/get_weather.dart';
 import 'package:weather_app/Widgtes/bottom_container.dart';
 import 'package:weather_app/Widgtes/center_container.dart';
@@ -8,6 +9,7 @@ import 'package:weather_app/Widgtes/week_days_container.dart';
 import 'package:weather_app/Widgtes/tertiary_container.dart';
 import 'package:weather_app/getX/controller.dart';
 
+// ignore: must_be_immutable
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key, this.weatherDataJson}) : super(key: key);
   final weatherDataJson;
@@ -15,6 +17,8 @@ class HomeScreen extends StatelessWidget {
   final double _fixedHeight = 10;
   var dateStringFormat = DateFormat.yMMMEd('en_US').format(DateTime.now());
   var weatherData = WeatherModel().getLocationAndWeatherData();
+  final _transition = Transition.cupertinoDialog;
+  final _duration = const Duration(milliseconds: 500);
   // *********************************************
   @override
   Widget build(BuildContext context) {
@@ -26,10 +30,20 @@ class HomeScreen extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         actions: [
-          Icon(
-            Icons.more_vert,
-            color: Theme.of(context).appBarTheme.backgroundColor,
-          )
+          IconButton(
+            splashRadius: 20,
+            onPressed: () {
+              Get.to(
+                () => const SettingsScreen(),
+                transition: _transition,
+                duration: _duration,
+              );
+            },
+            icon: Icon(
+              Icons.more_vert,
+              color: Theme.of(context).appBarTheme.foregroundColor,
+            ),
+          ),
         ],
         title: Text(
           dateStringFormat,

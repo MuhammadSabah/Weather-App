@@ -33,6 +33,13 @@ ThemeData themeData(BuildContext context) {
       ),
     ),
     appBarTheme: const AppBarTheme(
+      titleTextStyle: TextStyle(
+        color: Colors.black,
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+      ),
+      foregroundColor: Colors.black,
+      backgroundColor: Colors.white,
       actionsIconTheme: IconThemeData(
         color: Colors.black,
       ),
@@ -40,7 +47,7 @@ ThemeData themeData(BuildContext context) {
     scaffoldBackgroundColor: Colors.white,
     dividerColor: Colors.grey.shade400,
     progressIndicatorTheme: const ProgressIndicatorThemeData(
-      color: Colors.black,
+      color: Colors.transparent,
       circularTrackColor: Colors.grey,
     ),
   );
@@ -77,6 +84,13 @@ ThemeData darkThemeData(BuildContext context) {
       ),
     ),
     appBarTheme: const AppBarTheme(
+      titleTextStyle: TextStyle(
+        color: Colors.white,
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+      ),
+      foregroundColor: Colors.white,
+      backgroundColor: Colors.black,
       actionsIconTheme: IconThemeData(
         color: Colors.white,
       ),

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:weather_app/Screens/location_error_screen.dart';
 import 'package:weather_app/Services/get_weather.dart';
 import 'error_screen.dart';
 import 'home_screen.dart';
@@ -14,29 +13,25 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-  // _startTimer() async {
-  //   Duration _duration = const Duration(seconds: 8);
-  //   return Timer(_duration, route);
-  // }
-  route() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) {
-          return const LocationError();
-        },
-      ),
-    );
-  }
+  final _transition = Transition.cupertino;
+  final _duration = const Duration(milliseconds: 300);
 
   Future<dynamic> getLocationData() async {
     var weatherData = await WeatherModel().getLocationAndWeatherData();
 
     if (weatherData == null) {
-      Get.to(() => const ErrorScreen());
+      Get.to(
+        () => const ErrorScreen(),
+        transition: _transition,
+        duration: _duration,
+      );
     }
     if (weatherData != null) {
-      Get.to(() => HomeScreen(weatherDataJson: weatherData));
+      Get.to(
+        () => HomeScreen(weatherDataJson: weatherData),
+        transition: _transition,
+        duration: _duration,
+      );
     }
   }
 
