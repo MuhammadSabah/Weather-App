@@ -12,17 +12,17 @@ class WeekDaysContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    StateController controller = Get.put(StateController());
+    StateController weekDaysController = Get.put(StateController());
     List<Map<String, dynamic>> weekDays() {
       return List.generate(6, (index) {
         final eachWeekDay = DateTime.now().subtract(Duration(days: index + 1));
-        controller.updateTheWeekDay(weatherDataJson, index);
+        weekDaysController.updateTheWeekDay(weatherDataJson, index);
 
         return {
           'day': DateFormat.E().format(eachWeekDay).substring(0, 3),
-          'tempDay': controller.eachDayTemp.value,
-          'tempNight': controller.eachNightTemp.value,
-          'weatherIcon': controller.weekDaysWeatherIconData.value,
+          'tempDay': weekDaysController.eachDayTemp.value,
+          'tempNight': weekDaysController.eachNightTemp.value,
+          'weatherIcon': weekDaysController.weekDaysWeatherIconData.value,
         };
       }).reversed.toList();
     }
