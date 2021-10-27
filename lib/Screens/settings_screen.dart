@@ -16,10 +16,10 @@ class SettingsScreen extends StatelessWidget {
         ),
         bottom: PreferredSize(
           child: Container(
-            color: Colors.grey.shade600,
-            height: 2,
+            color: Colors.grey,
+            height: 1,
           ),
-          preferredSize: const Size.fromHeight(2),
+          preferredSize: const Size.fromHeight(1),
         ),
         leading: IconButton(
           splashRadius: 20,

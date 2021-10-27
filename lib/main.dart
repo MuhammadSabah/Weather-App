@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: themeData(context),
       darkTheme: darkThemeData(context),
-      themeMode: ThemeMode.light,
+      themeMode: ThemeMode.dark,
       home: const LoadingScreen(),
     );
   }

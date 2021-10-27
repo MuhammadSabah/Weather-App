@@ -36,7 +36,7 @@ ThemeData themeData(BuildContext context) {
       titleTextStyle: TextStyle(
         color: Colors.black,
         fontSize: 18,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w700,
       ),
       foregroundColor: Colors.black,
       backgroundColor: Colors.white,
@@ -87,7 +87,7 @@ ThemeData darkThemeData(BuildContext context) {
       titleTextStyle: TextStyle(
         color: Colors.white,
         fontSize: 18,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w700,
       ),
       foregroundColor: Colors.white,
       backgroundColor: Colors.black,
