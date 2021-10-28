@@ -13,7 +13,7 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-  final _transition = Transition.cupertino;
+  final _transition = Transition.leftToRight;
   final _duration = const Duration(milliseconds: 300);
 
   Future<dynamic> getLocationData() async {

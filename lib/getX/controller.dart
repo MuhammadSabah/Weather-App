@@ -74,11 +74,10 @@ class StateController extends GetxController {
       eachNightTemp(0).toInt();
       return;
     }
-    double tempOfDays =
-        weatherDataInput["daily"][7 - (index + 1)]["temp"]["day"];
+    var tempOfDays = weatherDataInput["daily"][7 - (index + 1)]["temp"]["day"];
     eachDayTemp(tempOfDays.toInt());
     //
-    double tempOfNights =
+    var tempOfNights =
         weatherDataInput["daily"][7 - (index + 1)]["temp"]["night"];
     eachNightTemp(tempOfNights.toInt());
     //

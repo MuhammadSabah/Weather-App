@@ -17,8 +17,8 @@ class HomeScreen extends StatelessWidget {
   final double _fixedHeight = 10;
   var dateStringFormat = DateFormat.yMMMEd('en_US').format(DateTime.now());
   var weatherData = WeatherModel().getLocationAndWeatherData();
-  final _transition = Transition.cupertinoDialog;
-  final _duration = const Duration(milliseconds: 500);
+  final _transition = Transition.rightToLeft;
+  final _duration = const Duration(milliseconds: 300);
   // *********************************************
   @override
   Widget build(BuildContext context) {
