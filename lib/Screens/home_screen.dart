@@ -34,7 +34,7 @@ class HomeScreen extends StatelessWidget {
             splashRadius: 20,
             onPressed: () {
               Get.to(
-                () => const SettingsScreen(),
+                () => SettingsScreen(),
                 transition: _transition,
                 duration: _duration,
               );

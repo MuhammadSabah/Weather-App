@@ -7,6 +7,8 @@ class StateController extends GetxController {
   StateController({this.weatherDataJsonState});
   final weatherDataJsonState;
   //
+  final groupVal = 'metric'.obs;
+  //
   final sunrise = ''.obs;
   final sunset = ''.obs;
   final temperatureDegree = 0.obs;

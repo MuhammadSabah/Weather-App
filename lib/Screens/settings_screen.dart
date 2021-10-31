@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:websafe_svg/websafe_svg.dart';
+import 'package:weather_app/Services/get_weather.dart';
+import 'package:weather_app/Widgtes/theme_list_tile.dart';
+import 'package:weather_app/Widgtes/unit_list_tile.dart';
+import 'package:weather_app/getX/controller.dart';
 
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+  SettingsScreen({Key? key}) : super(key: key);
+  final _fixedHeight = 10.0;
 
   @override
   Widget build(BuildContext context) {
+    StateController settingsController = Get.put(StateController());
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -32,64 +37,58 @@ class SettingsScreen extends StatelessWidget {
         foregroundColor: Theme.of(context).appBarTheme.foregroundColor,
       ),
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 18.0),
-              child: ListTile(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                tileColor: Colors.grey,
-                leading: Text(
-                  'Theme',
-                  style: Theme.of(context).textTheme.headline1?.copyWith(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: 0,
-                      ),
-                ),
-                trailing: GestureDetector(
-                  onTap: () {
-                    if (Get.isDarkMode) {
-                      Get.changeThemeMode(ThemeMode.light);
-                    } else {
-                      Get.changeThemeMode(ThemeMode.dark);
-                    }
-                  },
-                  child: AnimatedCrossFade(
-                    crossFadeState: Get.isDarkMode == true
-                        ? CrossFadeState.showFirst
-                        : CrossFadeState.showSecond,
-                    duration: const Duration(milliseconds: 300),
-                    firstCurve: Curves.decelerate,
-                    secondCurve: Curves.easeIn,
-                    firstChild: WebsafeSvg.asset(
-                      'assets/Sun.svg',
-                      color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(18),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Theme:",
+                style: Theme.of(context).textTheme.headline1?.copyWith(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0,
                     ),
-                    secondChild: WebsafeSvg.asset(
-                      'assets/Moon.svg',
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
               ),
-            ),
-          ],
+              SizedBox(height: _fixedHeight),
+              const ThemeListTile(),
+              SizedBox(height: _fixedHeight * 2),
+              Text(
+                "Unit:",
+                style: Theme.of(context).textTheme.headline1?.copyWith(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0,
+                    ),
+              ),
+              SizedBox(height: _fixedHeight),
+              Obx(() => UnitListTile(
+                    title: 'Celsius',
+                    value: 'metric',
+                    groupValue: settingsController.groupVal.value,
+                    onChanged: (newValue) async {
+                      settingsController.groupVal.value = newValue;
+                      var jsonUpdatedData = await WeatherModel()
+                          .getUnitMeasure(settingsController.groupVal.value);
+                      settingsController.updateUI(jsonUpdatedData);
+                    },
+                  )),
+              SizedBox(height: _fixedHeight),
+              Obx(() => UnitListTile(
+                    title: 'Fahrenheit',
+                    value: 'imperial',
+                    groupValue: settingsController.groupVal.value,
+                    onChanged: (newValue) async {
+                      settingsController.groupVal.value = newValue;
+                      var jsonUpdatedData = await WeatherModel()
+                          .getUnitMeasure(settingsController.groupVal.value);
+                      settingsController.updateUI(jsonUpdatedData);
+                    },
+                  )),
+            ],
+          ),
         ),
       ),
     );
   }
 }
-//  Get.isDarkMode == true
-//                     ? WebsafeSvg.asset(
-//                         'assets/Sun.svg',
-//                         color: Colors.white,
-//                       )
-//                     : WebsafeSvg.asset(
-//                         'assets/Moon.svg',
-//                         color: Colors.black,
-//                       ),
