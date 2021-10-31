@@ -39,6 +39,7 @@ dependencies:
   http:
   dio: ^4.0.0
   get:
+  websafe_svg:
 
 dev_dependencies:
   flutter_test:

@@ -35,7 +35,6 @@ class StateController extends GetxController {
       sunset('00:00').toString();
       cityName('Error').toString();
       weatherCondition("Not Available").toString();
-
       return;
     }
     iconCode(weatherDataInput["current"]["weather"][0]["icon"]).toString();
