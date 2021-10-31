@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:weather_app/Screens/loading_screen.dart';
-import 'package:weather_app/getX/controller.dart';
 import 'package:weather_app/theme.dart';
 
 void main() {
