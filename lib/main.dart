@@ -19,9 +19,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    StateController mainController = Get.put(StateController());
     return GetMaterialApp(
-      title: 'Weather App',
+      title: 'Simple Weather App',
       debugShowCheckedModeBanner: false,
       theme: themeData(context),
       darkTheme: darkThemeData(context),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:weather_app/getX/controller.dart';
 import 'package:websafe_svg/websafe_svg.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -8,7 +7,6 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    StateController controller = Get.put(StateController());
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -37,37 +35,45 @@ class SettingsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ListTile(
-              tileColor: Colors.grey,
-              leading: Text(
-                'Theme',
-                style: Theme.of(context).textTheme.headline1?.copyWith(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 18.0),
+              child: ListTile(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                tileColor: Colors.grey,
+                leading: Text(
+                  'Theme',
+                  style: Theme.of(context).textTheme.headline1?.copyWith(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 0,
+                      ),
+                ),
+                trailing: GestureDetector(
+                  onTap: () {
+                    if (Get.isDarkMode) {
+                      Get.changeThemeMode(ThemeMode.light);
+                    } else {
+                      Get.changeThemeMode(ThemeMode.dark);
+                    }
+                  },
+                  child: AnimatedCrossFade(
+                    crossFadeState: Get.isDarkMode == true
+                        ? CrossFadeState.showFirst
+                        : CrossFadeState.showSecond,
+                    duration: const Duration(milliseconds: 300),
+                    firstCurve: Curves.decelerate,
+                    secondCurve: Curves.easeIn,
+                    firstChild: WebsafeSvg.asset(
+                      'assets/Sun.svg',
+                      color: Colors.white,
                     ),
-              ),
-              trailing: GestureDetector(
-                onTap: () {
-                  if (Get.isDarkMode) {
-                    Get.changeThemeMode(ThemeMode.light);
-                  } else {
-                    Get.changeThemeMode(ThemeMode.dark);
-                  }
-                },
-                child: AnimatedCrossFade(
-                  crossFadeState: Get.isDarkMode == true
-                      ? CrossFadeState.showFirst
-                      : CrossFadeState.showSecond,
-                  duration: const Duration(milliseconds: 300),
-                  firstCurve: Curves.decelerate,
-                  secondCurve: Curves.easeIn,
-                  firstChild: WebsafeSvg.asset(
-                    'assets/Sun.svg',
-                    color: Colors.white,
-                  ),
-                  secondChild: WebsafeSvg.asset(
-                    'assets/Moon.svg',
-                    color: Colors.black,
+                    secondChild: WebsafeSvg.asset(
+                      'assets/Moon.svg',
+                      color: Colors.black,
+                    ),
                   ),
                 ),
               ),
