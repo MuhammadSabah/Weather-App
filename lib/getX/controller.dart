@@ -26,6 +26,14 @@ class StateController extends GetxController {
   final eachDayTemp = 0.obs;
   final eachNightTemp = 0.obs;
   //
+  final eachDayFahrenheitTemp = 0.obs;
+  final eachNightFahrenheitTemp = 0.obs;
+  //
+  dynamic convertToF(dynamic inputDay) {
+    return (inputDay * 9 / 5) + 32;
+  }
+
+  //
   void updateUI(dynamic weatherDataInput) {
     if (weatherDataInput == null) {
       temperatureDegree(0).toInt();
@@ -81,6 +89,12 @@ class StateController extends GetxController {
     var tempOfNights =
         weatherDataInput["daily"][7 - (index + 1)]["temp"]["night"];
     eachNightTemp(tempOfNights.toInt());
+    //
+    //**********************/
+    var getFDay = convertToF(tempOfDays.toInt());
+    var getFNight = convertToF(tempOfNights.toInt());
+    eachDayFahrenheitTemp(getFDay.toInt());
+    eachNightFahrenheitTemp(getFNight.toInt());
     //
     weekDaysIconCode(
         weatherDataInput["daily"][7 - (index + 1)]["weather"][0]["icon"]);

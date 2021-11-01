@@ -8,10 +8,18 @@ import 'package:weather_app/getX/controller.dart';
 class SettingsScreen extends StatelessWidget {
   SettingsScreen({Key? key}) : super(key: key);
   final _fixedHeight = 10.0;
+  //
+  StateController settingsController = Get.put(StateController());
+  void updatedData(var newValue) async {
+    settingsController.groupVal.value = newValue;
+    var jsonUpdatedData =
+        await WeatherModel().getUnitMeasure(settingsController.groupVal.value);
+    settingsController.updateUI(jsonUpdatedData);
+  }
 
+  //
   @override
   Widget build(BuildContext context) {
-    StateController settingsController = Get.put(StateController());
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -63,26 +71,19 @@ class SettingsScreen extends StatelessWidget {
               ),
               SizedBox(height: _fixedHeight),
               Obx(() => UnitListTile(
-                    title: 'Celsius',
-                    value: 'metric',
-                    groupValue: settingsController.groupVal.value,
-                    onChanged: (newValue) async {
-                      settingsController.groupVal.value = newValue;
-                      var jsonUpdatedData = await WeatherModel()
-                          .getUnitMeasure(settingsController.groupVal.value);
-                      settingsController.updateUI(jsonUpdatedData);
-                    },
-                  )),
+                  title: 'Celsius',
+                  value: 'metric',
+                  groupValue: settingsController.groupVal.value,
+                  onChanged: (newValue) {
+                    updatedData(newValue);
+                  })),
               SizedBox(height: _fixedHeight),
               Obx(() => UnitListTile(
                     title: 'Fahrenheit',
                     value: 'imperial',
                     groupValue: settingsController.groupVal.value,
-                    onChanged: (newValue) async {
-                      settingsController.groupVal.value = newValue;
-                      var jsonUpdatedData = await WeatherModel()
-                          .getUnitMeasure(settingsController.groupVal.value);
-                      settingsController.updateUI(jsonUpdatedData);
+                    onChanged: (newValue) {
+                      updatedData(newValue);
                     },
                   )),
             ],
