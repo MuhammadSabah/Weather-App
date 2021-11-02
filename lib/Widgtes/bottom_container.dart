@@ -33,23 +33,25 @@ class BottomContainer extends StatelessWidget {
                   style: Theme.of(context).textTheme.headline5,
                 ),
                 SizedBox(height: _fixedHeight * 2.5),
-                Obx(() => RichText(
-                      text: TextSpan(
-                        style: Theme.of(context).textTheme.headline6?.copyWith(
-                              fontSize: 14,
-                            ),
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: '${windSpeed.toString()} ',
+                Obx(
+                  () => RichText(
+                    text: TextSpan(
+                      style: Theme.of(context).textTheme.headline6?.copyWith(
+                            fontSize: 14,
                           ),
-                          TextSpan(
-                            text: controller.groupVal.value == "metric"
-                                ? 'm/s'
-                                : 'M/h',
-                          ),
-                        ],
-                      ),
-                    )),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: '${windSpeed.toString()} ',
+                        ),
+                        TextSpan(
+                          text: controller.groupVal.value == "metric"
+                              ? 'm/s'
+                              : 'M/h',
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
             const VerticalDivider(

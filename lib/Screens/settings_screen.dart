@@ -70,22 +70,27 @@ class SettingsScreen extends StatelessWidget {
                     ),
               ),
               SizedBox(height: _fixedHeight),
-              Obx(() => UnitListTile(
+              Obx(
+                () => UnitListTile(
                   title: 'Celsius',
                   value: 'metric',
                   groupValue: settingsController.groupVal.value,
                   onChanged: (newValue) {
                     updatedData(newValue);
-                  })),
+                  },
+                ),
+              ),
               SizedBox(height: _fixedHeight),
-              Obx(() => UnitListTile(
-                    title: 'Fahrenheit',
-                    value: 'imperial',
-                    groupValue: settingsController.groupVal.value,
-                    onChanged: (newValue) {
-                      updatedData(newValue);
-                    },
-                  )),
+              Obx(
+                () => UnitListTile(
+                  title: 'Fahrenheit',
+                  value: 'imperial',
+                  groupValue: settingsController.groupVal.value,
+                  onChanged: (newValue) {
+                    updatedData(newValue);
+                  },
+                ),
+              ),
             ],
           ),
         ),

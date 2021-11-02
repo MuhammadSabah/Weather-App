@@ -25,7 +25,6 @@ class StateController extends GetxController {
   final weekDaysWeatherIconData = Rxn<dynamic>();
   final eachDayTemp = 0.obs;
   final eachNightTemp = 0.obs;
-  //
   final eachDayFahrenheitTemp = 0.obs;
   final eachNightFahrenheitTemp = 0.obs;
   //
@@ -90,7 +89,6 @@ class StateController extends GetxController {
         weatherDataInput["daily"][7 - (index + 1)]["temp"]["night"];
     eachNightTemp(tempOfNights.toInt());
     //
-    //**********************/
     var getFDay = convertToF(tempOfDays.toInt());
     var getFNight = convertToF(tempOfNights.toInt());
     eachDayFahrenheitTemp(getFDay.toInt());

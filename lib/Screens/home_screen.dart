@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:weather_app/Screens/settings_screen.dart';
-import 'package:weather_app/Services/get_weather.dart';
 import 'package:weather_app/Widgtes/bottom_container.dart';
 import 'package:weather_app/Widgtes/center_container.dart';
 import 'package:weather_app/Widgtes/week_days_container.dart';
@@ -16,7 +15,6 @@ class HomeScreen extends StatelessWidget {
 
   final double _fixedHeight = 10;
   var dateStringFormat = DateFormat.yMMMEd('en_US').format(DateTime.now());
-  var weatherData = WeatherModel().getLocationAndWeatherData();
   final _transition = Transition.rightToLeft;
   final _duration = const Duration(milliseconds: 300);
   // *********************************************
@@ -60,28 +58,26 @@ class HomeScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                //CenterContainer
-                Obx(() => CenterContainer(
-                      cityName: stateController.cityName.value,
-                      temperatureDegree:
-                          stateController.temperatureDegree.value,
-                      weatherCondition: stateController.weatherCondition.value,
-                      centerIcon: stateController.weatherIconData.value,
-                    )),
-
+                Obx(
+                  () => CenterContainer(
+                    cityName: stateController.cityName.value,
+                    temperatureDegree: stateController.temperatureDegree.value,
+                    weatherCondition: stateController.weatherCondition.value,
+                    centerIcon: stateController.weatherIconData.value,
+                  ),
+                ),
                 SizedBox(height: _fixedHeight),
-                // SliderContainer
-                Obx(() => TertiaryContainer(
-                      minDegree: stateController.minDegree.value,
-                      maxDegree: stateController.maxDegree.value,
-                    )),
-                //
+                Obx(
+                  () => TertiaryContainer(
+                    minDegree: stateController.minDegree.value,
+                    maxDegree: stateController.maxDegree.value,
+                  ),
+                ),
                 SizedBox(height: _fixedHeight * 2),
                 const Divider(
                   thickness: 1,
                 ),
                 SizedBox(height: _fixedHeight),
-                // ListViewContainer
                 WeekDaysContainer(
                   weatherDataJson: weatherDataJson,
                 ),
@@ -90,14 +86,14 @@ class HomeScreen extends StatelessWidget {
                   thickness: 1,
                 ),
                 SizedBox(height: _fixedHeight),
-                // BottomContainer
-                Obx(() => BottomContainer(
-                      humidity: stateController.humidity.value,
-                      windSpeed: stateController.windSpeed.value,
-                      sunrise: stateController.sunrise.value,
-                      sunset: stateController.sunset.value,
-                    )),
-                //
+                Obx(
+                  () => BottomContainer(
+                    humidity: stateController.humidity.value,
+                    windSpeed: stateController.windSpeed.value,
+                    sunrise: stateController.sunrise.value,
+                    sunset: stateController.sunset.value,
+                  ),
+                ),
                 SizedBox(height: _fixedHeight * 4),
               ],
             ),

@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:weather_app/Screens/error_screen.dart';
 
 class NetworkHelper {
   NetworkHelper({required this.url});
@@ -11,8 +13,7 @@ class NetworkHelper {
       String data = response.body;
       return jsonDecode(data);
     } else {
-      String failData = 0.toString();
-      return jsonDecode(failData);
+      print("STATUS CODE: " + response.statusCode.toString());
     }
   }
 }
