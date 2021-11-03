@@ -12,8 +12,8 @@ class CenterContainer extends StatelessWidget {
   final int temperatureDegree;
   final String cityName;
   final String weatherCondition;
-  final double _fixedHeight = 10;
   final IconData centerIcon;
+  final double _fixedHeight = 10;
 
   @override
   Widget build(BuildContext context) {

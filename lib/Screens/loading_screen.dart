@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:weather_app/Screens/location_error_screen.dart';
@@ -30,7 +31,11 @@ class _LoadingScreenState extends State<LoadingScreen> {
         duration: _duration,
       );
     } else if (!serviceEnabled) {
-      Get.to(() => const LocationError());
+      Get.to(
+        () => const LocationError(),
+        transition: _locationTransition,
+        duration: _locationDuration,
+      );
     }
   }
 
@@ -45,7 +50,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     }
   }
 
-  // //Check the permission status
+  // Check the permission status
   Future<bool> permissionCheck() async {
     var permissionResult = await Geolocator.checkPermission();
     if (permissionResult == LocationPermission.always ||
@@ -64,7 +69,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
         return AlertDialog(
           backgroundColor: Colors.white,
           title: const Text(
-            "Location is disabled!, if you want to enable it click on the button below and re open the app.",
+            "Location access denied!, request permission again or close the app",
             style: TextStyle(
               fontSize: 16,
               color: Colors.black,
@@ -73,7 +78,20 @@ class _LoadingScreenState extends State<LoadingScreen> {
           actions: [
             TextButton(
               child: const Text(
-                "Enable",
+                "Exit",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              onPressed: () {
+                SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+              },
+            ),
+            TextButton(
+              child: const Text(
+                "Request",
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.green,
