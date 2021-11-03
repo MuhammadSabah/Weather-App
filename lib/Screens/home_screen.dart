@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:weather_app/Screens/settings_screen.dart';
+import 'package:weather_app/Services/get_weather.dart';
+import 'package:weather_app/Services/networking.dart';
 import 'package:weather_app/Widgtes/bottom_container.dart';
 import 'package:weather_app/Widgtes/center_container.dart';
 import 'package:weather_app/Widgtes/week_days_container.dart';
@@ -17,7 +19,21 @@ class HomeScreen extends StatelessWidget {
   var dateStringFormat = DateFormat.yMMMEd('en_US').format(DateTime.now());
   final _transition = Transition.rightToLeft;
   final _duration = const Duration(milliseconds: 300);
+  final WeatherModel _weatherModel = WeatherModel();
   // *********************************************
+  Future<void> refreshList(StateController controller) async {
+    await Future.delayed(const Duration(seconds: 2));
+    if (controller.groupVal.value == 'metric') {
+      var weatherData1 = await _weatherModel.getLocationAndWeatherData();
+      controller.updateUI(weatherData1);
+    } else if (controller.groupVal.value == 'imperial') {
+      var weatherData2 =
+          await _weatherModel.getUnitMeasure(controller.groupVal.value);
+      controller.updateUI(weatherData2);
+      WeekDaysContainer(weatherDataJson: weatherData2);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     StateController stateController = Get.put(StateController());
@@ -48,57 +64,67 @@ class HomeScreen extends StatelessWidget {
           style: Theme.of(context).textTheme.bodyText2,
         ),
       ),
-      body: GetBuilder<StateController>(
-        init: StateController(),
-        initState: (_) {
-          stateController.updateUI(weatherDataJson);
-        },
-        builder: (_) {
-          return SafeArea(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Obx(
-                  () => CenterContainer(
-                    cityName: stateController.cityName.value,
-                    temperatureDegree: stateController.temperatureDegree.value,
-                    weatherCondition: stateController.weatherCondition.value,
-                    centerIcon: stateController.weatherIconData.value,
-                  ),
+      body: RefreshIndicator(
+        displacement: 20,
+        color: (Get.isDarkMode) ? Colors.black : Colors.white,
+        onRefresh: () => refreshList(stateController),
+        child: GetBuilder<StateController>(
+          init: StateController(),
+          initState: (_) {
+            stateController.updateUI(weatherDataJson);
+          },
+          builder: (_) {
+            return SafeArea(
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Obx(
+                      () => CenterContainer(
+                        cityName: stateController.cityName.value,
+                        temperatureDegree:
+                            stateController.temperatureDegree.value,
+                        weatherCondition:
+                            stateController.weatherCondition.value,
+                        centerIcon: stateController.weatherIconData.value,
+                      ),
+                    ),
+                    SizedBox(height: _fixedHeight),
+                    Obx(
+                      () => TertiaryContainer(
+                        minDegree: stateController.minDegree.value,
+                        maxDegree: stateController.maxDegree.value,
+                      ),
+                    ),
+                    SizedBox(height: _fixedHeight * 2),
+                    const Divider(
+                      thickness: 1,
+                    ),
+                    SizedBox(height: _fixedHeight),
+                    WeekDaysContainer(
+                      weatherDataJson: weatherDataJson,
+                    ),
+                    SizedBox(height: _fixedHeight),
+                    const Divider(
+                      thickness: 1,
+                    ),
+                    SizedBox(height: _fixedHeight),
+                    Obx(
+                      () => BottomContainer(
+                        humidity: stateController.humidity.value,
+                        windSpeed: stateController.windSpeed.value,
+                        sunrise: stateController.sunrise.value,
+                        sunset: stateController.sunset.value,
+                      ),
+                    ),
+                    SizedBox(height: _fixedHeight * 4),
+                  ],
                 ),
-                SizedBox(height: _fixedHeight),
-                Obx(
-                  () => TertiaryContainer(
-                    minDegree: stateController.minDegree.value,
-                    maxDegree: stateController.maxDegree.value,
-                  ),
-                ),
-                SizedBox(height: _fixedHeight * 2),
-                const Divider(
-                  thickness: 1,
-                ),
-                SizedBox(height: _fixedHeight),
-                WeekDaysContainer(
-                  weatherDataJson: weatherDataJson,
-                ),
-                SizedBox(height: _fixedHeight),
-                const Divider(
-                  thickness: 1,
-                ),
-                SizedBox(height: _fixedHeight),
-                Obx(
-                  () => BottomContainer(
-                    humidity: stateController.humidity.value,
-                    windSpeed: stateController.windSpeed.value,
-                    sunrise: stateController.sunrise.value,
-                    sunset: stateController.sunset.value,
-                  ),
-                ),
-                SizedBox(height: _fixedHeight * 4),
-              ],
-            ),
-          );
-        },
+              ),
+            );
+          },
+        ),
       ),
     );
   }

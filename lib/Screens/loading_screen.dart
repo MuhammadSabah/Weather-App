@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:weather_app/Screens/error_screen.dart';
 import 'package:weather_app/Screens/location_error_screen.dart';
 import 'package:weather_app/Services/get_weather.dart';
 import 'home_screen.dart';
@@ -32,7 +33,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
       );
     } else if (!serviceEnabled) {
       Get.to(
-        () => const LocationError(),
+        () => LocationError(),
         transition: _locationTransition,
         duration: _locationDuration,
       );
@@ -50,7 +51,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     }
   }
 
-  // Check the permission status
+  // Check the permission status.
   Future<bool> permissionCheck() async {
     var permissionResult = await Geolocator.checkPermission();
     if (permissionResult == LocationPermission.always ||
@@ -61,6 +62,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     }
   }
 
+  // Show this dialog if permission access denied!.
   void showDenialDialog() {
     showDialog(
       context: context,

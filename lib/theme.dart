@@ -49,6 +49,7 @@ ThemeData themeData(BuildContext context) {
     progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: Colors.transparent,
       circularTrackColor: Colors.grey,
+      refreshBackgroundColor: Colors.black,
     ),
   );
 }
@@ -100,6 +101,7 @@ ThemeData darkThemeData(BuildContext context) {
     progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: Colors.white,
       circularTrackColor: Colors.grey,
+      refreshBackgroundColor: Colors.white,
     ),
   );
 }
