@@ -89,52 +89,49 @@ class HomeScreen extends StatelessWidget {
             return SafeArea(
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
-                child: SizedBox(
-                  height: _screenHeight,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Obx(
-                        () => CenterContainer(
-                          cityName: stateController.cityName.value,
-                          temperatureDegree:
-                              stateController.temperatureDegree.value,
-                          weatherCondition:
-                              stateController.weatherCondition.value,
-                          centerIcon: stateController.weatherIconData.value,
-                        ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Obx(
+                      () => CenterContainer(
+                        cityName: stateController.cityName.value,
+                        temperatureDegree:
+                            stateController.temperatureDegree.value,
+                        weatherCondition:
+                            stateController.weatherCondition.value,
+                        centerIcon: stateController.weatherIconData.value,
                       ),
-                      SizedBox(height: _fixedHeight),
-                      Obx(
-                        () => TertiaryContainer(
-                          minDegree: stateController.minDegree.value,
-                          maxDegree: stateController.maxDegree.value,
-                        ),
+                    ),
+                    SizedBox(height: _fixedHeight),
+                    Obx(
+                      () => TertiaryContainer(
+                        minDegree: stateController.minDegree.value,
+                        maxDegree: stateController.maxDegree.value,
                       ),
-                      SizedBox(height: _fixedHeight * 2),
-                      const Divider(
-                        thickness: 1,
+                    ),
+                    SizedBox(height: _fixedHeight * 2),
+                    const Divider(
+                      thickness: 1,
+                    ),
+                    SizedBox(height: _fixedHeight),
+                    WeekDaysContainer(
+                      weatherDataJson: weatherDataJson,
+                    ),
+                    SizedBox(height: _fixedHeight),
+                    const Divider(
+                      thickness: 1,
+                    ),
+                    SizedBox(height: _fixedHeight),
+                    Obx(
+                      () => BottomContainer(
+                        humidity: stateController.humidity.value,
+                        windSpeed: stateController.windSpeed.value,
+                        sunrise: stateController.sunrise.value,
+                        sunset: stateController.sunset.value,
                       ),
-                      SizedBox(height: _fixedHeight),
-                      WeekDaysContainer(
-                        weatherDataJson: weatherDataJson,
-                      ),
-                      SizedBox(height: _fixedHeight),
-                      const Divider(
-                        thickness: 1,
-                      ),
-                      SizedBox(height: _fixedHeight),
-                      Obx(
-                        () => BottomContainer(
-                          humidity: stateController.humidity.value,
-                          windSpeed: stateController.windSpeed.value,
-                          sunrise: stateController.sunrise.value,
-                          sunset: stateController.sunset.value,
-                        ),
-                      ),
-                      SizedBox(height: _fixedHeight * 4),
-                    ],
-                  ),
+                    ),
+                    SizedBox(height: _fixedHeight * 4),
+                  ],
                 ),
               ),
             );

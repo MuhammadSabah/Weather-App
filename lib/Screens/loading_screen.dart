@@ -18,7 +18,7 @@ class LoadingScreen extends StatefulWidget {
 class _LoadingScreenState extends State<LoadingScreen> {
   final _locationDuration = const Duration(seconds: 1);
   final _locationTransition = Transition.native;
-  final _transition = Transition.rightToLeft;
+  final _transition = Transition.leftToRight;
   final _duration = const Duration(milliseconds: 300);
   final WeatherModel _weatherModel = WeatherModel();
 
