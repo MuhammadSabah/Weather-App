@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:weather_app/getX/controller.dart';
 
 class BottomContainer extends StatelessWidget {
   const BottomContainer(
@@ -17,6 +19,7 @@ class BottomContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    StateController controller = Get.put(StateController());
     return IntrinsicHeight(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18.0),
@@ -30,9 +33,24 @@ class BottomContainer extends StatelessWidget {
                   style: Theme.of(context).textTheme.headline5,
                 ),
                 SizedBox(height: _fixedHeight * 2.5),
-                Text(
-                  "${windSpeed.toString()} m/s",
-                  style: Theme.of(context).textTheme.headline6,
+                Obx(
+                  () => RichText(
+                    text: TextSpan(
+                      style: Theme.of(context).textTheme.headline6?.copyWith(
+                            fontSize: 14,
+                          ),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: '${windSpeed.toString()} ',
+                        ),
+                        TextSpan(
+                          text: controller.groupVal.value == "metric"
+                              ? 'm/s'
+                              : 'M/h',
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),

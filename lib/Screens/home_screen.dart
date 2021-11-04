@@ -1,138 +1,54 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:weather_app/Screens/location_error_screen.dart';
+import 'package:weather_app/Screens/settings_screen.dart';
 import 'package:weather_app/Services/get_weather.dart';
-import 'package:weather_app/Utils/weather_icon.dart';
 import 'package:weather_app/Widgtes/bottom_container.dart';
 import 'package:weather_app/Widgtes/center_container.dart';
 import 'package:weather_app/Widgtes/week_days_container.dart';
 import 'package:weather_app/Widgtes/tertiary_container.dart';
+import 'package:weather_app/getX/controller.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key, this.weatherDataJson}) : super(key: key);
-
+// ignore: must_be_immutable
+class HomeScreen extends StatelessWidget {
+  HomeScreen({Key? key, this.weatherDataJson}) : super(key: key);
   final weatherDataJson;
 
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
   final double _fixedHeight = 10;
-
-  // ************************
   var dateStringFormat = DateFormat.yMMMEd('en_US').format(DateTime.now());
-  //
-  var weatherData = WeatherModel().getLocationAndWeatherData();
-  //
-  late int dt;
-  late String sunrise;
-  late String sunset;
-  late int temperatureDegree;
-  late int maxDegree;
-  late int minDegree;
-  late String cityName;
-  late String weatherCondition;
-  late double windSpeed;
-  late int humidity;
-  late IconData weatherIconData;
-  late String iconCode;
-  //
-  @override
-  void initState() {
-    super.initState();
-    updateUI(widget.weatherDataJson);
-  }
-
-  void updateUI(dynamic weatherDataInput) {
-    // Change it to PROVIDER......
-    setState(() {
-      if (weatherDataInput == null) {
-        temperatureDegree = 0;
-        maxDegree = 0;
-        minDegree = 0;
-        humidity = 0;
-        windSpeed = 0;
-        sunrise = "00:00";
-        sunset = "00:00";
-        cityName = "Error";
-        weatherCondition = "Not Available";
-        return;
-      }
-      iconCode = weatherDataInput["current"]["weather"][0]["icon"];
-      weatherIconData = getIconData(iconCode);
-
-      int sunriseDT = weatherDataInput["current"]["sunrise"];
-      int sunsetDT = weatherDataInput["current"]["sunset"];
-      sunrise = getTheDateTime(sunriseDT);
-      sunset = getTheDateTime(sunsetDT);
-
-      double temp = weatherDataInput["current"]["temp"];
-      temperatureDegree = temp.toInt();
-      double maxTemp = weatherDataInput["daily"][0]["temp"]["max"];
-      double minTemp = weatherDataInput["daily"][0]["temp"]["min"];
-      maxDegree = maxTemp.toInt();
-      minDegree = minTemp.toInt();
-      cityName = weatherDataInput["timezone"];
-      weatherCondition =
-          weatherDataInput["current"]["weather"][0]["description"];
-      windSpeed = weatherDataInput["current"]["wind_speed"];
-      humidity = weatherDataInput["current"]["humidity"];
-    });
-  }
-
-  IconData getIconData(String iconCode) {
-    switch (this.iconCode) {
-      case '01d':
-        return WeatherIcons.clearDay;
-      case '01n':
-        return WeatherIcons.clearNight;
-      case '02d':
-        return WeatherIcons.fewCloudsDay;
-      case '02n':
-        return WeatherIcons.fewCloudsNight;
-      case '03d':
-      case '04d':
-        return WeatherIcons.cloudDay;
-      case '03n':
-      case '04n':
-        return WeatherIcons.cloudNight;
-      case '09d':
-        return WeatherIcons.showerRainDay;
-      case '09n':
-        return WeatherIcons.showerRainNight;
-      case '10d':
-        return WeatherIcons.rainDay;
-      case '10n':
-        return WeatherIcons.rainNight;
-      case '11d':
-        return WeatherIcons.thunderStormDay;
-      case '11n':
-        return WeatherIcons.thunderStormNight;
-      case '13d':
-        return WeatherIcons.snowDay;
-      case '13n':
-        return WeatherIcons.snowNight;
-      case '50d':
-        return WeatherIcons.mistDay;
-      case '50n':
-        return WeatherIcons.mistNight;
-      default:
-        return WeatherIcons.clearDay;
-    }
-  }
-
+  final _transition = Transition.rightToLeft;
+  final _duration = const Duration(milliseconds: 300);
+  final _locationDuration = const Duration(milliseconds: 50);
+  final _locationTransition = Transition.native;
+  final WeatherModel _weatherModel = WeatherModel();
   // *********************************************
-  String getTheDateTime(int dt) {
-    var d12;
-    setState(() {
-      d12 = DateFormat('hh:mm a')
-          .format(DateTime.fromMillisecondsSinceEpoch(dt * 1000));
-    });
-    return d12;
+  Future<void> refreshList(StateController controller) async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    await Future.delayed(const Duration(seconds: 2));
+    if (controller.groupVal.value == 'metric') {
+      var weatherData1 = await _weatherModel.getLocationAndWeatherData();
+      controller.updateUI(weatherData1);
+    } else if (controller.groupVal.value == 'imperial') {
+      var weatherData2 =
+          await _weatherModel.getUnitMeasure(controller.groupVal.value);
+      controller.updateUI(weatherData2);
+      WeekDaysContainer(weatherDataJson: weatherData2);
+    }
+    if (!serviceEnabled) {
+      Get.off(
+        LocationError(),
+        transition: _locationTransition,
+        duration: _locationDuration,
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    double _screenHeight = MediaQuery.of(context).size.height;
+    StateController stateController = Get.put(StateController());
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -140,59 +56,86 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
         centerTitle: true,
         actions: [
-          Icon(
-            Icons.more_vert,
-            color: Theme.of(context).appBarTheme.backgroundColor,
-          )
+          IconButton(
+            splashRadius: 20,
+            onPressed: () {
+              Get.to(
+                () => SettingsScreen(),
+                transition: _transition,
+                duration: _duration,
+              );
+            },
+            icon: Icon(
+              Icons.more_vert,
+              color: Theme.of(context).appBarTheme.foregroundColor,
+            ),
+          ),
         ],
         title: Text(
           dateStringFormat,
           style: Theme.of(context).textTheme.bodyText2,
         ),
       ),
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            //CenterContainer
-            CenterContainer(
-              cityName: cityName,
-              temperatureDegree: temperatureDegree,
-              weatherCondition: weatherCondition,
-              centerIcon: weatherIconData,
-            ),
-            //
-            SizedBox(height: _fixedHeight),
-            // SliderContainer
-            TertiaryContainer(
-              minDegree: minDegree,
-              maxDegree: maxDegree,
-            ),
-            //
-            SizedBox(height: _fixedHeight * 2),
-            const Divider(
-              thickness: 1,
-            ),
-            SizedBox(height: _fixedHeight),
-            // ListViewContainer
-            WeekDaysContainer(
-              weatherDataJson: widget.weatherDataJson,
-            ),
-            SizedBox(height: _fixedHeight),
-            const Divider(
-              thickness: 1,
-            ),
-            SizedBox(height: _fixedHeight),
-            // BottomContainer
-            BottomContainer(
-              humidity: humidity,
-              windSpeed: windSpeed,
-              sunrise: sunrise,
-              sunset: sunset,
-            ),
-            //
-            SizedBox(height: _fixedHeight * 4),
-          ],
+      body: RefreshIndicator(
+        displacement: 20,
+        color: (Get.isDarkMode) ? Colors.black : Colors.white,
+        onRefresh: () => refreshList(stateController),
+        child: GetBuilder<StateController>(
+          init: StateController(),
+          initState: (_) {
+            stateController.updateUI(weatherDataJson);
+          },
+          builder: (_) {
+            return SafeArea(
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Obx(
+                      () => CenterContainer(
+                        cityName: stateController.cityName.value,
+                        temperatureDegree:
+                            stateController.temperatureDegree.value,
+                        weatherCondition:
+                            stateController.weatherCondition.value,
+                        centerIcon: stateController.weatherIconData.value,
+                      ),
+                    ),
+                    SizedBox(height: _fixedHeight),
+                    Obx(
+                      () => TertiaryContainer(
+                        minDegree: stateController.minDegree.value,
+                        maxDegree: stateController.maxDegree.value,
+                      ),
+                    ),
+                    SizedBox(height: _fixedHeight * 2),
+                    const Divider(
+                      thickness: 1,
+                    ),
+                    SizedBox(height: _fixedHeight),
+                    WeekDaysContainer(
+                      weatherDataJson: weatherDataJson,
+                    ),
+                    SizedBox(height: _fixedHeight),
+                    const Divider(
+                      thickness: 1,
+                    ),
+                    SizedBox(height: _fixedHeight),
+                    Obx(
+                      () => BottomContainer(
+                        humidity: stateController.humidity.value,
+                        windSpeed: stateController.windSpeed.value,
+                        sunrise: stateController.sunrise.value,
+                        sunset: stateController.sunset.value,
+                      ),
+                    ),
+                    SizedBox(height: _fixedHeight * 4),
+                  ],
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
