@@ -70,8 +70,9 @@ class StateController extends GetxController {
   //
   String getTheDateTime(int dt) {
     var d12;
-    d12 = DateFormat('hh:mm a')
-        .format(DateTime.fromMillisecondsSinceEpoch(dt * 1000));
+    d12 = DateFormat('hh:mm a').format(
+      DateTime.fromMillisecondsSinceEpoch(dt * 1000),
+    );
     return d12;
   }
 

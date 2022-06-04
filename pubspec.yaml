@@ -39,6 +39,7 @@ dependencies:
   http:
   get:
   websafe_svg:
+  shared_preferences:
 
 dev_dependencies:
   flutter_test:

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:weather_app/Screens/error_screen.dart';
 import 'package:weather_app/Screens/location_error_screen.dart';
 import 'package:weather_app/Services/get_weather.dart';
 import 'home_screen.dart';
